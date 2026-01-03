@@ -1,3 +1,8 @@
+#include <vector>
+using namespace std;
+// LeetCode: Best Time to Buy and Sell Stock
+// Approach: Track the minimum price and calculate max profit on the go.
+// Time: O(n), Space: O(1)
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
