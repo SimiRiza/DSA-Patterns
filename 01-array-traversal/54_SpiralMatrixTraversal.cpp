@@ -2,34 +2,60 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// File: SpiralMatrixTraversal.cpp
+// Problem: Print elements of a 2D matrix in spiral order
+// Approach: Boundary shrinking technique
+
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        vector<int> ans;
+        vector<int> ans;   // stores the spiral order result
+        
+        // Edge case: empty matrix
         if (matrix.size() == 0) return ans;
-        int tr=0,br=matrix.size()-1,lc=0,rc=matrix[0].size()-1;  
-        while(tr<=br && lc<=rc){
-            //print top row
-            for(int i=lc;i<=rc;i++){
-                ans.push_back(matrix[tr][i]);  
+        
+        // Initialize boundaries
+        int tr = 0;                       // top row
+        int br = matrix.size() - 1;       // bottom row
+        int lc = 0;                       // left column
+        int rc = matrix[0].size() - 1;    // right column
+        
+        // Continue while boundaries are valid
+        while (tr <= br && lc <= rc) {
+            
+            // 1. Print the top row (left to right)
+            for (int i = lc; i <= rc; i++) {
+                ans.push_back(matrix[tr][i]);
             }
-            //print right column
-            for(int i=tr+1;i<br;i++){
-                ans.push_back(matrix[i][rc]);  
+            
+            // 2. Print the right column (top to bottom)
+            for (int i = tr + 1; i < br; i++) {
+                ans.push_back(matrix[i][rc]);
             }
-            //print bottom row
-            if(tr!=br){
-                for(int i=rc;i>=lc;i--){
-                    ans.push_back(matrix[br][i]);  
+            
+            // 3. Print the bottom row (right to left)
+            // Only if top row is not same as bottom row
+            if (tr != br) {
+                for (int i = rc; i >= lc; i--) {
+                    ans.push_back(matrix[br][i]);
                 }
             }
-            //print left column
-            if(lc!=rc){
-                for(int i=br-1;i>=tr+1;i--){
-                    ans.push_back(matrix[i][lc]);  
-                }}
-            tr++; rc--;br--;lc++;
+            
+            // 4. Print the left column (bottom to top)
+            // Only if left column is not same as right column
+            if (lc != rc) {
+                for (int i = br - 1; i >= tr + 1; i--) {
+                    ans.push_back(matrix[i][lc]);
+                }
+            }
+            
+            // Move boundaries inward
+            tr++;
+            br--;
+            lc++;
+            rc--;
         }
+        
         return ans;
     }
 };
