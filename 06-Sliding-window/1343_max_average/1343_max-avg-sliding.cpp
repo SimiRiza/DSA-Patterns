@@ -1,11 +1,12 @@
+
 #include <iostream>
 #include <vector>
 using namespace std;
 
 /*
-Approach: Sliding Window
+Approach 1: Sliding Window (Using Average)
 - Maintain window sum of size k
-- Check average condition for each window
+- Calculate avg = sum / k and compare with threshold
 
 Note to self:
 - Can optimize by converting avg condition to: sum >= k * threshold (avoids division)
