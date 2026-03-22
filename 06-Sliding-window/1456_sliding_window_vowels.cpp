@@ -1,5 +1,6 @@
 // Approach: Sliding Window
-// We maintain a window of size k and count vowels efficiently while sliding.
+// Description: Maintain a window of size k and count vowels inside it.
+// Slide the window and update the count efficiently.
 
 #include <iostream>
 #include <vector>
@@ -8,49 +9,48 @@ using namespace std;
 
 class Solution {
 public:
+
     bool isVowel(char c){
         return c=='a' || c=='e' || c=='i' || c=='o' || c=='u';
     }
 
     int maxVowels(string s, int k) {
-        int n = s.size();
+        int start=0,end=0,count=0;
 
-        // Step 1: count vowels in first window
-        int count = 0;
-        for(int i = 0; i < k; i++){
-            if(isVowel(s[i])) count++;
+        // Build first window
+        while(end < k){
+            if (isVowel(s[end]))
+                count++;
+            end++;
         }
 
-        int maxCount = count;
+        int max_vowels = count;
 
-        // Step 2: slide the window
-        for(int i = k; i < n; i++){
-            // remove left char
-            if(isVowel(s[i - k])) count--;
+        // Sliding window
+        while(end < s.length()){
+            if (isVowel(s[start]))
+                count--;
+            start++;
 
-            // add right char
-            if(isVowel(s[i])) count++;
+            if (isVowel(s[end]))
+                count++;
+            end++;
 
-            maxCount = max(maxCount, count);
+            max_vowels = max(count,max_vowels);
         }
 
-        return maxCount;
+        return max_vowels;
     }
 };
 
-// ----------- MAIN FUNCTION (for testing) -----------
 int main() {
-    Solution sol;
+    Solution obj;
 
     // Test 1
-    string s1 = "abciiidef";
-    int k1 = 3;
-    cout << sol.maxVowels(s1, k1) << endl; // Expected: 3
+    cout << obj.maxVowels("abciiidef", 3) << endl; // Expected: 3
 
     // Test 2
-    string s2 = "aeiou";
-    int k2 = 2;
-    cout << sol.maxVowels(s2, k2) << endl; // Expected: 2
+    cout << obj.maxVowels("aeiou", 2) << endl; // Expected: 2
 
     return 0;
 }
