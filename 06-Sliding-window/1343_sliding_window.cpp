@@ -4,35 +4,42 @@ using namespace std;
 
 /*
 Approach: Sliding Window
-- Convert avg condition to sum >= k * threshold
 - Maintain window sum of size k
-- Slide window and count valid subarrays
+- Check average condition for each window
+
+Note to self:
+- Can optimize by converting avg condition to: sum >= k * threshold (avoids division)
 */
 
 class Solution {
 public:
     int numOfSubarrays(vector<int>& arr, int k, int threshold) {
-        int n = arr.size();
-        int target = k * threshold;
-        
-        int sum = 0;
-        
-        // first window
-        for(int i = 0; i < k; i++) {
-            sum += arr[i];
+        int start = 0, end = 0, count = 0;
+        long long sum = 0, avg;
+
+        // build first window
+        while (end < k) {
+            sum += arr[end];
+            end++;
         }
-        
-        int count = 0;
-        if(sum >= target) count++;
-        
-        // sliding window
-        for(int i = k; i < n; i++) {
-            sum += arr[i];
-            sum -= arr[i - k];
-            
-            if(sum >= target) count++;
+
+        // slide window
+        while (end < arr.size()) {
+            avg = sum / k;
+            if (avg >= threshold)
+                count++;
+
+            sum -= arr[start];
+            start++;
+            sum += arr[end];
+            end++;
         }
-        
+
+        // check last window
+        avg = sum / k;
+        if (avg >= threshold)
+            count++;
+
         return count;
     }
 };
