@@ -1,10 +1,5 @@
-// Approach: Circular Sliding Window (Forward + Backward)
-// Idea:
-// - If k > 0 → sum next k elements (right side)
-// - If k < 0 → sum previous k elements (left side)
-// - Use circular indexing with modulo
-// Time: O(n)
-// Space: O(1) extra (excluding result)
+// Approach: Sliding Window (Circular)
+// We maintain a circular window of size k and keep updating sum efficiently.
 
 #include <iostream>
 #include <vector>
@@ -13,51 +8,52 @@ using namespace std;
 class Solution {
 public:
     vector<int> decrypt(vector<int>& arr, int k) {
-        vector<int> res(arr.size(), 0);
+        int n = arr.size();
+        vector<int> res(n, 0);
 
-        if (k == 0) return res;
+        if (k == 0)
+            return res;
 
-        if (k > 0) {
-            int start = 1, end = 1;
+        if (k < 0) {
+            int curr = 0;
+            int start = n - abs(k), end = n - 1;
             long long sum = 0;
 
-            while (end <= k) {
-                sum += arr[end];
-                end++;
-            }
+            // initial window sum
+            for (int i = start; i <= end; i++)
+                sum += arr[i];
 
-            while (start < arr.size()) {
-                res[start - 1] = sum;
+            while (curr < n) {
+                res[curr] = sum;
+
                 sum -= arr[start];
-                start++;
-                sum += arr[(end) % arr.size()];
-                end = (end + 1) % arr.size();
-            }
+                start = (start + 1) % n;
 
-            res[start - 1] = sum;
-        }
+                end = (end + 1) % n;
+                sum += arr[end];
+
+                curr++;
+            }
+        } 
         else {
-            int n = arr.size();
-            int start = n - 1, end = n - 1;
+            int curr = 0;
+            int start = 1, end = k;
             long long sum = 0;
 
-            int cnt = -k;
-            while (cnt--) {
-                sum += arr[(end - 1 + n) % n];
-                end = (end - 1 + n) % n;
-            }
+            // initial window sum
+            for (int i = start; i <= end; i++)
+                sum += arr[i % n];
 
-            int i = n - 1;
-            while (i >= 0) {
-                res[i] = sum;
+            while (curr < n) {
+                res[curr] = sum;
 
-                sum -= arr[(start - 1 + n) % n];
-                start = (start - 1 + n) % n;
+                sum -= arr[start % n];
+                start = (start + 1) % n;
 
-                sum += arr[(end - 1 + n) % n];
-                end = (end - 1 + n) % n;
+                end = (end + 1) % n;
+                sum += arr[end];
 
-                i--;
+                curr++;
             }
         }
 
@@ -66,19 +62,23 @@ public:
 };
 
 int main() {
-    Solution sol;
+    Solution obj;
 
     // Test 1
     vector<int> arr1 = {5, 7, 1, 4};
     int k1 = 3;
-    vector<int> res1 = sol.decrypt(arr1, k1);
+    vector<int> res1 = obj.decrypt(arr1, k1);
+
+    cout << "Test 1: ";
     for (int x : res1) cout << x << " ";
     cout << endl;
 
     // Test 2
     vector<int> arr2 = {2, 4, 9, 3};
     int k2 = -2;
-    vector<int> res2 = sol.decrypt(arr2, k2);
+    vector<int> res2 = obj.decrypt(arr2, k2);
+
+    cout << "Test 2: ";
     for (int x : res2) cout << x << " ";
     cout << endl;
 
