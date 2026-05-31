@@ -1,35 +1,37 @@
 /*
  * LeetCode 402 - Remove K Digits
- * Approach: Monotonic Increasing Stack + Greedy
+ * Approach: Monotonic Increasing Stack
  *
  * Idea:
- * - Maintain a monotonically increasing stack of digits.
- * - If the current digit is smaller than the stack top,
- *   remove larger digits while deletions (k) are available.
- * - If deletions remain after processing all digits,
- *   remove digits from the end of the number.
- * - Build the result from the stack, reverse it,
- *   and remove leading zeros.
+ * - Maintain digits in increasing order using a stack.
+ * - If the current digit is smaller than the stack top and we still
+ *   have removals left (k), remove larger digits from the stack.
+ * - If removals remain after processing all digits, remove from the end.
+ * - Build the result, remove leading zeros, and handle the empty case.
+ *
+ * Time Complexity: O(n)
+ * Space Complexity: O(n)
  */
 
 #include <iostream>
-#include <string>
 #include <stack>
+#include <string>
 #include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
-    string removeKdigits(string num, int k) {
+    string removeKdigits(string nums, int k) {
         stack<int> st;
+        string res = "";
+        int curr_dig;
 
-        // Process each digit greedily
-        for (char n : num) {
-            int curr_dig = n - '0';
+        // Maintain a monotonic increasing stack
+        for (char n : nums) {
+            curr_dig = n - '0';
 
-            // Remove larger previous digits to minimize the number
-            while (!st.empty() && curr_dig < st.top() && k > 0) {
+            while (!st.empty() && st.top() > curr_dig && k) {
                 st.pop();
                 k--;
             }
@@ -37,44 +39,40 @@ public:
             st.push(curr_dig);
         }
 
-        // If deletions remain, remove from the end
-        while (k > 0 && !st.empty()) {
+        // Remove remaining digits from the end if needed
+        while (!st.empty() && k > 0) {
             st.pop();
             k--;
         }
 
-        string res = "";
-
-        // Build result from stack (currently reversed)
+        // Build result from stack (currently reversed order)
         while (!st.empty()) {
             res += (st.top() + '0');
             st.pop();
         }
 
-        // Restore original order
         reverse(res.begin(), res.end());
 
-        // Remove leading zeros
-        int i = 0;
-        while (i < (int)res.size() && res[i] == '0') {
-            i++;
+        // Count leading zeros
+        int zero_c = 0;
+        for (int i = 0; i < (int)res.length(); i++) {
+            if (res[i] == '0') {
+                zero_c++;
+            } else {
+                break;
+            }
         }
 
-        res = res.substr(i);
+        // Remove leading zeros
+        res.erase(0, zero_c);
 
-        // If all digits were removed or only zeros remain
-        return res.empty() ? "0" : res;
+        return res == "" ? "0" : res;
     }
 };
 
 int main() {
     Solution sol;
-
-    // Test Case 1
     cout << sol.removeKdigits("1432219", 3) << endl; // Expected: 1219
-
-    // Test Case 2
     cout << sol.removeKdigits("10200", 1) << endl;   // Expected: 200
-
     return 0;
 }
