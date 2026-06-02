@@ -1,46 +1,32 @@
 /*
  * LeetCode 441 - Arranging Coins
- * Approach: Binary Search
+ * Approach: Mathematical Formula (Quadratic Equation)
  *
- * Search for the largest number of complete rows (k)
- * such that k * (k + 1) / 2 <= n.
+ * From:
+ *      k(k + 1) / 2 <= n
  *
- * Time Complexity: O(log n)
+ * Solving:
+ *      k² + k - 2n = 0
+ *
+ * Using the quadratic formula:
+ *      k = (sqrt(1 + 8n) - 1) / 2
+ *
+ * The floor of this value gives the maximum
+ * number of complete rows.
+ *
+ * Time Complexity: O(1)
  * Space Complexity: O(1)
  */
 
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 class Solution {
 public:
     int arrangeCoins(int n) {
-        int start = 0, end = n - 1;
-        int mid, val, ans = 0;
-        long long stair;
-
-        while (start <= end) {
-            mid = start + (end - start) / 2;
-
-            // Convert mid (0-based) to row count
-            val = mid + 1;
-
-            // Number of coins needed for 'val' rows
-            stair = val * (val + 1LL) / 2LL;
-
-            if (stair < n) {
-                ans = val;          // Valid answer so far
-                start = mid + 1;    // Try larger row count
-            }
-            else if (stair == n) {
-                return val;         // Exact match found
-            }
-            else {
-                end = mid - 1;      // Too many coins used
-            }
-        }
-
-        return ans;
+        double root_part = 0.5 * sqrt(1LL + 8LL * n);
+        return floor(root_part - 0.5);
     }
 };
 
