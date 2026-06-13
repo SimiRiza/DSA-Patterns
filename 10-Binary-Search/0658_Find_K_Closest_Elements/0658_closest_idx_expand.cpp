@@ -22,11 +22,6 @@ using namespace std;
     Space Complexity:
     - Auxiliary Space: O(1)
     - Output Array: O(k)
-
-    Note:
-    A more elegant solution exists that binary-searches the final
-    window directly check file 0658_optimized_WindowSearch.cpp with O(log(n-k) + k) time complexity,
-    and for cleaner code with same time complexity, check 0658_closestIdx_clean.cpp
 */
 
 class Solution {
@@ -107,7 +102,18 @@ public:
         return res;
     }
 };
+/*
+    Note:
+    A more elegant solution exists that binary-searches the final
+    window directly. Check:
 
+    - 0658_optimized_WindowSearch.cpp
+      O(log(n-k) + k) time complexity
+
+    - 0658_closestIdx_clean.cpp
+      Same idea as this solution (find closest index first),
+      but implemented in a cleaner and easier-to-explain way.
+*/
 int main() {
     Solution sol;
 
