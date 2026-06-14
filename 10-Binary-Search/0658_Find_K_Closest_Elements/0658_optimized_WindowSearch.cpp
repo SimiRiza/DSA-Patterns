@@ -61,3 +61,26 @@ int main() {
 
     return 0;
 }
+
+/*
+ Self Notes / Evolution:
+    - Tried binary searching directly on window positions
+      using:
+
+        if(abs(arr[right_b + 1] - x) < abs(arr[left_b] - x))
+            left = left_b + 1;
+        else if(abs(arr[right_b + 1] - x) ==
+                abs(arr[left_b] - x)) {
+            if(x >= arr[right_b + 1])
+                left = left_b + 1;
+            else
+                right = left_b;
+        }
+        else
+            right = left_b;
+
+    - This works because the tie case restores the
+      direction information lost by abs().
+    - However, it requires extra tie-handling logic and
+      is harder to reason about mathematically.
+*/
