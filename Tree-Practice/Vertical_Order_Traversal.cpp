@@ -33,7 +33,6 @@ void updateMap_verticalOrder(Node* root,int x,map<int,vector<int>> &mp){
 
     }
 
-
 int main(){
 
     Node* root = new Node(1);
@@ -41,19 +40,21 @@ int main(){
     root->left = new Node(2);
     root->right = new Node(3);
 
-    root->left->left = new Node(4);
-    root->left->right = new Node(5);
+    root->left->right = new Node(4);
+    root->right->left = new Node(5);
 
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
+    root->left->right->right = new Node(6);
+
+    root->left->right->right->left = new Node(7);
 
     map<int,vector<int>> mp;
     int x = 0;
     updateMap_verticalOrder(root,x,mp);
 
     for(auto pair : mp){
+        cout << "Column " << pair.first << " : ";
         for(int ele : pair.second){
-            cout<<ele<<" ";
+            cout << ele << " ";
         }
         cout << endl;
     }
