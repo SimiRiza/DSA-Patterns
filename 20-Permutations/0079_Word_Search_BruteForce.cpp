@@ -7,41 +7,25 @@ Pattern: DFS + Backtracking
 
 Approach:
 - Start DFS from every cell matching word[0].
-- Match the current character.
-- Move in 4 directions.
-- Mark the cell visited so it cannot be reused.
-- Backtrack by unmarking the cell and removing the character.
+- If the current cell matches word[idx], add it to temp.
+- Mark the cell as visited.
+- Explore all 4 directions.
+- Backtrack by removing the character and unmarking the cell.
 
-Time: Can become exponential
-Space: O(m*n) visited + recursion stack
+Time: O(m * n * 4^L)
+Space: O(m * n) visited + O(L) recursion/temp
+       where L = word.length()
 
 Self Note:
-This is a brute-force/backtracking version.
+- A cell cannot be used twice in the same path.
+- visited prevents revisiting a cell.
+- After exploring all 4 directions, undo the choice:
+      temp.pop_back();
+      visited[i][j] = false;
 
-IMPORTANT:
-This version can TLE because:
-- temp string is maintained unnecessarily.
-- temp == word is checked repeatedly.
-- idx is carried separately.
-- We start DFS from every matching cell.
-
-A better version directly checks:
-    board[i][j] == word[idx]
-
-and returns true when:
-    idx == word.size() - 1
-
-So this version is mainly for understanding
-the DFS + backtracking idea.
-
-Core pattern:
-    choose cell
-    → mark visited
-    → explore 4 directions
-    → undo visited
-
-Also:
-A cell can be used only once in the current path.
+Note:
+This version still maintains temp and therefore does extra work.
+A more optimized version can directly use idx without temp.
 */
 
 class Solution {
@@ -54,9 +38,6 @@ public:
                          int i,
                          int j,
                          vector<vector<bool>>& visited) {
-
-        if(temp == word)
-            return true;
 
         if(board[i][j] == word[idx]) {
 
@@ -86,9 +67,7 @@ public:
             }
 
             // Backtrack
-            if(!temp.empty())
-                temp.pop_back();
-
+            temp.pop_back();
             visited[i][j] = false;
         }
 
@@ -100,7 +79,9 @@ public:
         int m = board.size();
         int n = board[0].size();
 
-        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        vector<vector<bool>> visited(
+            m, vector<bool>(n, false)
+        );
 
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
@@ -136,3 +117,14 @@ int main() {
 
     return 0;
 }
+// self-note to avoid TLE:
+// 1. Use fixed arrays for constant 4-direction movement.
+//    Creating direction vectors inside every DFS call caused TLE.
+
+// 2. Check temp == word AFTER adding the current character.
+//    Otherwise single-character words like "a" fail.
+
+// 3. Backtracking requires undoing BOTH choices:
+//    temp.pop_back() and visited[i][j] = false.
+
+// 4. Pass frequently reused strings by reference to avoid unnecessary copies.
