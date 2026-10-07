@@ -2,7 +2,6 @@
 using namespace std;
 
 /*
-Problem: 90. Subsets II
 Pattern: Recursion — Include / Exclude + Duplicate Handling
 
 Approach:
@@ -16,16 +15,9 @@ Space: O(n) recursion stack + current subset
        Output: O(n * 2^n)
 
 Self Note:
-- Every subset comes from TAKE or NOT TAKE.
-- Duplicate subsets happen when duplicate elements are
-  separately skipped/taken.
 - TAKE is explored normally.
 - In NOT TAKE, skip all duplicates.
 - Sorting is necessary to make duplicates adjacent.
-
-Key:
-TAKE → i + 1
-NOT TAKE → skip duplicates → i + 1
 */
 
 class Solution {
